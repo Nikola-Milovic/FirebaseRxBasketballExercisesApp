@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "790255273921",
+    "firebase_url": "https://basketpro-e2082.firebaseio.com",
+    "project_id": "basketpro-e2082",
+    "storage_bucket": "basketpro-e2082.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:790255273921:android:b387a127e3efb2abf29140",
+        "android_client_info": {
+          "package_name": "com.nikolam.basketpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "790255273921-lq1jsjod4s2cqcb9mujuqf2rh1mrhond.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNjVZPUbBEw3zNfgI4XxOAKUazXfyzsTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "790255273921-lq1jsjod4s2cqcb9mujuqf2rh1mrhond.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

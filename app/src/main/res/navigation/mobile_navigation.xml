@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mobile_navigation"
+        app:startDestination="@id/drillsSelectionFragment">
+
+    <fragment
+        android:id="@+id/drillsSelectionFragment"
+        android:name="com.nikolam.basketpro.ui.drills.selection.DrillsSelectionFragment"
+        android:label="drills_selection_fragment"
+        tools:layout="@layout/drills_selection_fragment" >
+        <action
+            android:id="@+id/action_drillsSelectionFragment_to_drillsListFragment"
+            app:destination="@id/drillsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/drillsListFragment"
+        android:name="com.nikolam.basketpro.ui.drills.list.DrillsListFragment"
+        android:label="DrillsListFragment" >
+        <argument
+            android:name="DrillType"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_drillsListFragment_to_drillDetailFragment"
+            app:destination="@id/drillDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/drillDetailFragment"
+        android:name="com.nikolam.basketpro.ui.drills.detail.DrillDetailFragment"
+        android:label="DrillDetailFragment" >
+        <argument
+            android:name="Drill_ID"
+            app:argType="string" />
+    </fragment>
+</navigation>
