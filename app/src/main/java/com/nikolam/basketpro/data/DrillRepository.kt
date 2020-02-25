@@ -9,16 +9,13 @@ import io.reactivex.rxjava3.core.Single
 
 class DrillRepository( private val remoteDataSource : DataSource, private val remoteFilesDataSource: FirebaseStorageDataSource ) {
 
-
     fun loadDrillTypes(): Observable<DrillsType> {
         return remoteDataSource.loadDrillTypes()
     }
 
-
     fun loadDrillDetails(id : String): Single<DrillDetail> {
         return remoteDataSource.loadDrillDetails(id)
     }
-
 
     fun loadDrillList(drillType : String): Observable<Drill> {
         return remoteDataSource.loadDrillList(drillType)

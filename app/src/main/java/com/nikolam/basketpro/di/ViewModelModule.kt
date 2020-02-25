@@ -6,11 +6,10 @@ import com.nikolam.basketpro.ui.drills.selection.DrillsSelectionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import kotlin.coroutines.CoroutineContext
 
 val viewModelModule = module {
 
-    viewModel { DrillsSelectionViewModel(get(), get(named("main")), get(named("io"))) }
+    viewModel { DrillsSelectionViewModel(get(), get(named("io"))) }
 
     viewModel { DrillsListViewModel(get()) }
 

@@ -15,12 +15,11 @@ buildscript {
 
     }
 
-
     repositories {
         google()
         jcenter()
-        
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -28,8 +27,6 @@ buildscript {
         // in the individual module build.gradle files
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
         classpath "com.google.gms:google-services:$googleserv_version"
-
-
     }
 }
 
@@ -41,6 +38,10 @@ allprojects {
         maven { url "https://oss.jfrog.org/libs-snapshot" }
         
     }
+}
+
+subprojects {
+    apply from: rootProject.file("jacoco.gradle")
 }
 
 task clean(type: Delete) {
