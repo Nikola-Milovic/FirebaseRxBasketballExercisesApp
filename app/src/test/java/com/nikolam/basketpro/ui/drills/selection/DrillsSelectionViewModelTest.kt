@@ -49,7 +49,7 @@ internal class DrillsSelectionViewModelTest {
 
         val fakeResponse = Observable.just(expectedDrillTypeOne, expectedDrillTypeTwo)
 
-        every { mockkDrillRepository.loadDrillTypes() } returns fakeResponse
+        every { mockkDrillRepository.loadDrillTypeWithRawImageUrl() } returns fakeResponse
 
         drillsSelectionViewModel.fetchDrillTypes()
 

@@ -7,13 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nikolam.basketpro.data.DrillRepository
 import com.nikolam.basketpro.model.Drill
-import com.nikolam.basketpro.model.DrillsType
 import com.nikolam.basketpro.util.plusAssign
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class DrillsListViewModel(val repository: DrillRepository) : ViewModel() {
@@ -43,25 +40,25 @@ class DrillsListViewModel(val repository: DrillRepository) : ViewModel() {
                     }
 
                     override fun onComplete() {
-                        updateImages(list)
+                      //  updateImages(list)
                     }
                 })
         }
     }
 
 
-    fun updateImages(list: ArrayList<Drill>)
-    {
-        viewModelScope.launch {
-            list.map {
-                async {
-                    val newDrillImageUrl = repository.getImageUrl(it.drillList_imageUrl)
-                    it.drillList_imageUrl = newDrillImageUrl
-                }
-            }.awaitAll()
-            _drillsList.postValue(list)
-        }
-    }
+//    fun updateImages(list: ArrayList<Drill>)
+//    {
+//        viewModelScope.launch {
+//            list.map {
+//                async {
+//                    val newDrillImageUrl = repository.getImageUrl(it.drillList_imageUrl)
+//                    it.drillList_imageUrl = newDrillImageUrl
+//                }
+//            }.awaitAll()
+//            _drillsList.postValue(list)
+//        }
+//    }
 
     override fun onCleared() {
         super.onCleared()

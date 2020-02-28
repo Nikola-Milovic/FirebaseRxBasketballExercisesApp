@@ -28,30 +28,31 @@ class DrillsSelectionViewModel(
         fetchDrillTypes()
     }
 
+
     fun fetchDrillTypes() {
+
         val list = ArrayList<DrillsType>()
+
         viewModelScope.launch(io) {
+            compositeDisposable += repository.loadDrillTypeWithRawImageUrl()
+                .subscribeWith(object : DisposableObserver<DrillsType>() {
 
-            val observer = object : DisposableObserver<DrillsType>() {
+                    override fun onError(e: Throwable) {
+                        Log.d("TAG", "error " + e?.message)
+                    }
 
-                override fun onError(e: Throwable) {
-                    Log.d("TAG", "error " + e.message)
-                }
+                    override fun onNext(data: DrillsType) {
+                        list.add(data)
+                    }
 
-                override fun onNext(data: DrillsType) {
-                    list.add(data)
-                }
-
-                override fun onComplete() {
-                    Log.d("TAG", "COMPLETE")
-                    _drillsTypeList.postValue(list)
-                }
-            }
-
-            compositeDisposable += observer
-
-            repository.loadDrillTypes().subscribeWith(observer)
+                    override fun onComplete() {
+                        Log.d("TAG", "COMPLETE")
+                        _drillsTypeList.postValue(list)
+                    }
+                })
         }
+
+
     }
 
     override fun onCleared() {

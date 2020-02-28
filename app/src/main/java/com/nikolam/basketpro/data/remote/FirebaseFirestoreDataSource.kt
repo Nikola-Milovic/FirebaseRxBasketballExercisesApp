@@ -13,18 +13,17 @@ class FirebaseFirestoreDataSource(val firebaseFirestore: FirebaseFirestore) : Da
 
 
     override fun loadDrillTypes(): Observable<DrillsType> {
-
         return Observable.create<DrillsType> { emitter ->
             firebaseFirestore.collection("drilltypes")
                 .get()
                 .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        try {
+                    try {
+                        for (document in documents) {
                             val doc = document.toObject(DrillsType::class.java)
                             emitter.onNext(doc)
-                        } catch (e: Exception) {
-                            emitter.onError(e)
                         }
+                    } catch (e: Exception) {
+                        emitter.onError(e)
                     }
                     emitter.onComplete()
                 }

@@ -1,23 +1,24 @@
 package com.nikolam.basketpro.data.remote
 
 import com.google.firebase.storage.FirebaseStorage
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
+import io.reactivex.Single
 
-class FirebaseStorageDataSource(val firebaseStorage: FirebaseStorage){
+interface ImageUrlDataSource {
+    fun getImageUrl(rawImageUrl: String) : Single<String>
+}
 
-    val storageRef = firebaseStorage.reference
+class FirebaseStorageDataSource(val firebaseStorage: FirebaseStorage) : ImageUrlDataSource {
 
-    suspend fun getImageUrl(storageLocation : String) : String = suspendCoroutine {cont ->
-            firebaseStorage.getReferenceFromUrl(storageLocation).downloadUrl.addOnSuccessListener {
-                cont.resume(it.toString())
-            }.addOnFailureListener {
-                cont.resumeWithException(it)
-            }
+    override fun getImageUrl(rawImageUrl: String): Single<String>
+    {
+        return Single.create<String>{emitter->
+        firebaseStorage.getReferenceFromUrl(rawImageUrl).downloadUrl.addOnSuccessListener {
+            emitter.onSuccess(it.toString())
+        }.addOnFailureListener {
+            emitter.onError(it)
         }
+    }
+}
 }
 
 
