@@ -71,6 +71,7 @@ class DrillSelectionAdapter(
 
             Glide.with(context)
                 .load(drillType.drillType_imageUrl)
+                .centerCrop()
                 .listener(object : RequestListener<Drawable> {
 
                     override fun onResourceReady(

@@ -9,7 +9,7 @@ import com.nikolam.basketpro.util.SingleLiveEvent
 import com.nikolam.basketpro.util.plusAssign
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -29,18 +29,16 @@ class DrillDetailViewModel(val repository: DrillRepository) : ViewModel() {
     fun getDrillDetails(id: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
-             compositeDisposable += repository.loadDrillDetails(id).subscribeWith(object : io.reactivex.rxjava3.observers.DisposableSingleObserver<DrillDetail>(),
+             compositeDisposable += repository.loadDrillDetails(id).subscribeWith(object : DisposableSingleObserver<DrillDetail>(),
                  Disposable {
-                 override fun onSuccess(t: DrillDetail?) {
+                 override fun onSuccess(t: DrillDetail) {
                      Log.d("TAG", t.toString())
-                     _playVideoEvent.postValue(t?.drill_videoUrl)
+                     _playVideoEvent.postValue(t.drill_videoUrl)
                  }
 
-                 override fun onError(e: Throwable?) {
-                     Log.d("TAG", "message is + " + e?.message)
+                 override fun onError(e: Throwable) {
+                     Log.d("TAG", "message is + " + e.message)
                  }
-
-
              })
 
         }

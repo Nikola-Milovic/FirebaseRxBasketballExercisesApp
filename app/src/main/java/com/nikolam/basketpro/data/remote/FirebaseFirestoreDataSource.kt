@@ -40,13 +40,13 @@ class FirebaseFirestoreDataSource(val firebaseFirestore: FirebaseFirestore) : Da
             firebaseFirestore.collection(drillType + "_list")
                 .get()
                 .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        try {
+                    try {
+                        for (document in documents) {
                             val doc = document.toObject(Drill::class.java)
                             emitter.onNext(doc)
-                        } catch (e: Exception) {
-                            emitter.onError(e)
                         }
+                    } catch (e: Exception) {
+                        emitter.onError(e)
                     }
                     emitter.onComplete()
                 }

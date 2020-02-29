@@ -34,7 +34,7 @@ class DrillsSelectionViewModel(
         val list = ArrayList<DrillsType>()
 
         viewModelScope.launch(io) {
-            compositeDisposable += repository.loadDrillTypeWithRawImageUrl()
+            compositeDisposable += repository.loadFullDrillType()
                 .subscribeWith(object : DisposableObserver<DrillsType>() {
 
                     override fun onError(e: Throwable) {
@@ -42,6 +42,7 @@ class DrillsSelectionViewModel(
                     }
 
                     override fun onNext(data: DrillsType) {
+                        Log.d("TAG", "data is " + data)
                         list.add(data)
                     }
 

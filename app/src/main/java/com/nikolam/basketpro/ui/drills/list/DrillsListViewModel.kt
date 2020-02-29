@@ -28,7 +28,7 @@ class DrillsListViewModel(val repository: DrillRepository) : ViewModel() {
         val list = ArrayList<Drill>()
 
         viewModelScope.launch(Dispatchers.IO) {
-            compositeDisposable += repository.loadDrillList(drillType)
+            compositeDisposable += repository.loadFullDrillList(drillType)
                 .subscribeWith(object : DisposableObserver<Drill>() {
 
                     override fun onError(e: Throwable) {
@@ -40,25 +40,12 @@ class DrillsListViewModel(val repository: DrillRepository) : ViewModel() {
                     }
 
                     override fun onComplete() {
-                      //  updateImages(list)
+                        _drillsList.postValue(list)
                     }
                 })
         }
     }
 
-
-//    fun updateImages(list: ArrayList<Drill>)
-//    {
-//        viewModelScope.launch {
-//            list.map {
-//                async {
-//                    val newDrillImageUrl = repository.getImageUrl(it.drillList_imageUrl)
-//                    it.drillList_imageUrl = newDrillImageUrl
-//                }
-//            }.awaitAll()
-//            _drillsList.postValue(list)
-//        }
-//    }
 
     override fun onCleared() {
         super.onCleared()

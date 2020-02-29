@@ -5,13 +5,13 @@ import com.nikolam.basketpro.model.Drill
 import com.nikolam.basketpro.model.DrillDetail
 import com.nikolam.basketpro.model.DrillsType
 import io.reactivex.Observable
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 import org.junit.jupiter.api.Test
 
 internal class DrillRepositoryTest {
-    @Test
-    internal fun `will return model with updated image urls`() {
 
+    @Test
+    fun `will return model with updated image urls`() {
         val expectedModel = DrillsType("XXX", "YYY")
         val repository = DrillRepository(object : DataSource {
             override fun loadDrillTypes(): Observable<DrillsType> = Observable.just(DrillsType("XXX", "XXX"))
@@ -20,16 +20,16 @@ internal class DrillRepositoryTest {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
-            override fun loadDrillDetails(id: String): Single<DrillDetail> {
+            override fun loadDrillDetails(id: String): io.reactivex.rxjava3.core.Single<DrillDetail> {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, object : ImageUrlDataSource {
-            override fun getImageUrl(rawImageUrl: String): String {
-                return "YYY"
+            override fun getImageUrl(rawImageUrl: String): Single<String> {
+               return Single.just("YYY")
             }
         })
 
-        val testObserver = repository.loadDrillTypeWithRawImageUrl().test()
+        val testObserver = repository.loadFullDrillType().test()
 
         testObserver.assertValues(expectedModel)
 

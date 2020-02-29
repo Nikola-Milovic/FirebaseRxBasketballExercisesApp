@@ -14,7 +14,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.nikolam.basketpro.R
 import com.nikolam.basketpro.model.Drill
-import com.nikolam.basketpro.model.DrillsType
 import com.nikolam.basketpro.util.DrillsClickListener
 
 
@@ -74,6 +73,7 @@ class DrillsListAdapter(
 
             Glide.with(context)
                 .load(drill.drillList_imageUrl)
+                .centerCrop()
                 .listener(object : RequestListener<Drawable> {
 
                     override fun onResourceReady(
