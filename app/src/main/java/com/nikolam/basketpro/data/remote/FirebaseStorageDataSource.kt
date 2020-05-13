@@ -1,5 +1,6 @@
 package com.nikolam.basketpro.data.remote
 
+import android.util.Log
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Single
 
@@ -15,6 +16,7 @@ class FirebaseStorageDataSource(val firebaseStorage: FirebaseStorage) : ImageUrl
         firebaseStorage.getReferenceFromUrl(rawImageUrl).downloadUrl.addOnSuccessListener {
             emitter.onSuccess(it.toString())
         }.addOnFailureListener {
+            Log.d("TAG", "ERROR FROM ImageURlDataSource " + it.localizedMessage)
             emitter.onError(it)
         }
     }
