@@ -6,8 +6,8 @@ import com.nikolam.basketpro.model.DrillDetail
 import com.nikolam.basketpro.model.DrillsType
 import io.reactivex.Observable
 
-class FakeRemoteDataSource () : DataSource {
-        override fun loadDrillTypes(): Observable<DrillsType> = Observable.just(DrillsType("XXX", "XXX"))
+class FakeRemoteDataSource (val answer : DrillsType) : DataSource {
+        override fun loadDrillTypes(): Observable<DrillsType> = Observable.just(answer)
 
         override fun loadDrillList(drillType: String): Observable<Drill> {
             TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

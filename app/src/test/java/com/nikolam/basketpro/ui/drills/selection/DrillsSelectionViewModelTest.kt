@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 @ExtendWith(value = [InstantExecutorExtension::class, TestSchedulerExtension::class])
@@ -27,8 +28,7 @@ internal class DrillsSelectionViewModelTest {
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
     private val drillsSelectionViewModel = DrillsSelectionViewModel(
-        mockkDrillRepository,
-        Dispatchers.Unconfined
+        mockkDrillRepository
     )
 
     @BeforeEach
@@ -43,19 +43,29 @@ internal class DrillsSelectionViewModelTest {
     }
 
     @Test
-    fun `can return drills with images`() {
+    fun `will populate livedata with correct value, when repository returns correct data`() {
         val expectedDrillTypeOne = DrillsType("title1", "url1")
         val expectedDrillTypeTwo = DrillsType("title2", "url2")
 
         val fakeResponse = Observable.just(expectedDrillTypeOne, expectedDrillTypeTwo)
 
-        every { mockkDrillRepository.loadDrillTypeWithRawImageUrl() } returns fakeResponse
+        every { mockkDrillRepository.loadFullDrillType() } returns fakeResponse
 
         drillsSelectionViewModel.fetchDrillTypes()
 
         assertEquals(listOf(expectedDrillTypeOne, expectedDrillTypeTwo), drillsSelectionViewModel.drillsTypeList.value)
     }
 
+    @Test
+    fun `will catch and exception, when repository returns an exception`() {
+
+        every { mockkDrillRepository.loadFullDrillType() } answers {
+           Observable.error(IOException("Error"))
+        }
+
+        drillsSelectionViewModel.fetchDrillTypes()
 
 
+        assertEquals(true, drillsSelectionViewModel.getErrorOccured().value)
+    }
 }

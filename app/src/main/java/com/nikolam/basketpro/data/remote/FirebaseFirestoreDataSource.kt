@@ -7,7 +7,7 @@ import com.nikolam.basketpro.model.Drill
 import com.nikolam.basketpro.model.DrillDetail
 import com.nikolam.basketpro.model.DrillsType
 import io.reactivex.Observable
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.Single
 
 class FirebaseFirestoreDataSource(val firebaseFirestore: FirebaseFirestore) : DataSource {
 
@@ -28,7 +28,7 @@ class FirebaseFirestoreDataSource(val firebaseFirestore: FirebaseFirestore) : Da
                     emitter.onComplete()
                 }
                 .addOnFailureListener { exception ->
-                    Log.w("TAG", "Error getting documents: ", exception)
+                    Log.d("TAG", "Error getting documents: ", exception)
                     emitter.onError(exception)
                 }
         }
@@ -51,13 +51,13 @@ class FirebaseFirestoreDataSource(val firebaseFirestore: FirebaseFirestore) : Da
                     emitter.onComplete()
                 }
                 .addOnFailureListener { exception ->
-                    Log.w("TAG", "Error getting documents: ", exception)
+                    Log.d("TAG", "Error getting documents: ", exception)
                     emitter.onError(exception)
                 }
         }
     }
 
-    override fun loadDrillDetails(id : String) : Single<DrillDetail>{
+    override fun loadDrillDetails(id : String) : Single<DrillDetail> {
        return Single.create<DrillDetail>{emitter ->
            firebaseFirestore.collection("drills")
                .document(id)
@@ -65,13 +65,14 @@ class FirebaseFirestoreDataSource(val firebaseFirestore: FirebaseFirestore) : Da
                .addOnSuccessListener { document ->
                        try {
                            val doc = document.toObject(DrillDetail::class.java)
+                           if(doc != null)
                            emitter.onSuccess(doc)
                        } catch (e: Exception) {
                            emitter.onError(e)
                        }
                    }
                .addOnFailureListener { exception ->
-                   Log.w("TAG", "Error getting documents: ", exception)
+                   Log.d("TAG", "Error getting documents: ", exception)
                    emitter.onError(exception)
                }
        }
