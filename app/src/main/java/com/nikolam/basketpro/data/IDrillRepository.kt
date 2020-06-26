@@ -6,11 +6,8 @@ import com.nikolam.basketpro.model.DrillsType
 import io.reactivex.Observable
 import io.reactivex.Single
 
-interface DataSource {
-
-    fun loadDrillTypes() : Observable<DrillsType>
-
-    fun loadDrillList(drillType: String): Observable<Drill>
-
+interface IDrillRepository {
+    fun loadFullDrillType(): Observable<DrillsType>
+    fun loadFullDrillList(drillType: String) : Observable<Drill>
     fun loadDrillDetails(id: String): Single<DrillDetail>
 }

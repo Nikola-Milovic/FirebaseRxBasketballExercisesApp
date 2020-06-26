@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 internal class DrillRepositoryTest {
 
     @Test
-    fun `will return model with updated image urls`() {
+    fun `will return drill type model with updated image urls`() {
         val expectedModel = DrillsType("XXX", "YYY")
         val repository = DrillRepository(object : DataSource {
             override fun loadDrillTypes(): Observable<DrillsType> = Observable.just(DrillsType("XXX", "XXX"))
@@ -20,7 +20,7 @@ internal class DrillRepositoryTest {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
-            override fun loadDrillDetails(id: String): io.reactivex.rxjava3.core.Single<DrillDetail> {
+            override fun loadDrillDetails(id: String): Single <DrillDetail> {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }, object : ImageUrlDataSource {
@@ -32,6 +32,32 @@ internal class DrillRepositoryTest {
         val testObserver = repository.loadFullDrillType().test()
 
         testObserver.assertValues(expectedModel)
+    }
 
+
+    @Test
+    fun `will return drill list model with updated image urls`() {
+        val expectedModel = Drill("YYY", "ID", "Description", "Title")
+        val givenModel = Drill("XXX", "ID", "Description", "Title")
+
+        val repository = DrillRepository(object : DataSource {
+            override fun loadDrillTypes(): Observable<DrillsType> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun loadDrillList(drillType: String): Observable<Drill> = Observable.just(givenModel)
+
+            override fun loadDrillDetails(id: String): Single <DrillDetail> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }, object : ImageUrlDataSource {
+            override fun getImageUrl(rawImageUrl: String): Single<String> {
+                return Single.just("YYY")
+            }
+        })
+
+        val testObserver = repository.loadFullDrillList("footwork").test()
+
+        testObserver.assertValues(expectedModel)
     }
 }

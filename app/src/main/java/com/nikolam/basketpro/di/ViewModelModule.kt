@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { DrillsSelectionViewModel(get()) }
+    viewModel { DrillsSelectionViewModel(get(), get()) }
 
     viewModel { DrillsListViewModel(get()) }
 

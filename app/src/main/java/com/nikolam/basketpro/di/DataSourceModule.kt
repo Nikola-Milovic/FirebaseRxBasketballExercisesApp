@@ -7,7 +7,6 @@ import org.koin.dsl.module
 
 val datasourceModule = module {
 
-
     single{FirebaseFirestoreDataSource(get())}
 
     single{FirebaseStorageDataSource(get())}

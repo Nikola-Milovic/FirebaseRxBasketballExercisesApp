@@ -5,16 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nikolam.basketpro.data.DrillRepository
+import com.nikolam.basketpro.data.IDrillRepository
 import com.nikolam.basketpro.model.DrillsType
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
-import io.reactivex.rxkotlin.plusAssign
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class DrillsSelectionViewModel(
-    private val repository: DrillRepository,
+    private val repository: IDrillRepository,
     private val io: CoroutineContext
 ) : ViewModel() {
 
@@ -34,15 +33,16 @@ class DrillsSelectionViewModel(
         val list = ArrayList<DrillsType>()
 
         viewModelScope.launch(io) {
-            compositeDisposable += repository.loadFullDrillType()
+
+            val disposable = repository.loadFullDrillType()
                 .subscribeWith(object : DisposableObserver<DrillsType>() {
 
                     override fun onError(e: Throwable) {
-                        Log.d("TAG", "error " + e?.message)
+                        Log.d("TAG", "error " + e.message)
                     }
 
                     override fun onNext(data: DrillsType) {
-                        Log.d("TAG", "data is " + data)
+                        Log.d("TAG", "data is $data")
                         list.add(data)
                     }
 
@@ -51,9 +51,14 @@ class DrillsSelectionViewModel(
                         _drillsTypeList.postValue(list)
                     }
                 })
+
+            compositeDisposable.add(disposable)
         }
+    }
 
-
+    fun handleError(bool : Boolean) : Boolean{
+      // bool1 = bool
+        return bool
     }
 
     override fun onCleared() {

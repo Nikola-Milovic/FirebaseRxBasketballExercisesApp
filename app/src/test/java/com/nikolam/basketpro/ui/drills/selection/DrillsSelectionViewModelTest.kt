@@ -3,7 +3,9 @@ package com.nikolam.basketpro.ui.drills.selection
 
 import com.nikolam.basketpro.TestUtils.InstantExecutorExtension
 import com.nikolam.basketpro.TestUtils.TestSchedulerExtension
+import com.nikolam.basketpro.TestUtils.getOrAwaitValue
 import com.nikolam.basketpro.data.DrillRepository
+import com.nikolam.basketpro.data.FakeDrillRepository
 import com.nikolam.basketpro.model.DrillsType
 import io.mockk.every
 import io.mockk.mockk
@@ -14,21 +16,26 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.io.IOException
+import java.util.concurrent.TimeoutException
 
 @ExperimentalCoroutinesApi
 @ExtendWith(value = [InstantExecutorExtension::class, TestSchedulerExtension::class])
 internal class DrillsSelectionViewModelTest {
 
-    private val mockkDrillRepository: DrillRepository = mockk(relaxed = true)
+    private val fakeDrillRepository = FakeDrillRepository()
+
+    private val mockDrillRepository = mockk<DrillRepository>(relaxed = true)
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
     private val drillsSelectionViewModel = DrillsSelectionViewModel(
-        mockkDrillRepository
+        mockDrillRepository,
+        mainThreadSurrogate
     )
 
     @BeforeEach
@@ -47,25 +54,23 @@ internal class DrillsSelectionViewModelTest {
         val expectedDrillTypeOne = DrillsType("title1", "url1")
         val expectedDrillTypeTwo = DrillsType("title2", "url2")
 
-        val fakeResponse = Observable.just(expectedDrillTypeOne, expectedDrillTypeTwo)
-
-        every { mockkDrillRepository.loadFullDrillType() } returns fakeResponse
+        every { mockDrillRepository.loadFullDrillType() } returns Observable.just(expectedDrillTypeOne, expectedDrillTypeTwo)
 
         drillsSelectionViewModel.fetchDrillTypes()
 
-        assertEquals(listOf(expectedDrillTypeOne, expectedDrillTypeTwo), drillsSelectionViewModel.drillsTypeList.value)
+        val data = drillsSelectionViewModel.drillsTypeList.getOrAwaitValue()
+
+        assertEquals(arrayListOf(expectedDrillTypeOne, expectedDrillTypeTwo), data )
     }
 
-    @Test
+    @Test()
     fun `will catch and exception, when repository returns an exception`() {
 
-        every { mockkDrillRepository.loadFullDrillType() } answers {
-           Observable.error(IOException("Error"))
-        }
+        every { mockDrillRepository.loadFullDrillType() } returns Observable.error(IOException("Error"))
 
         drillsSelectionViewModel.fetchDrillTypes()
 
 
-        assertEquals(true, drillsSelectionViewModel.getErrorOccured().value)
+
     }
 }

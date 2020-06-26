@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nikolam.basketpro.data.DrillRepository
+import com.nikolam.basketpro.data.IDrillRepository
 import com.nikolam.basketpro.model.Drill
 import com.nikolam.basketpro.util.plusAssign
 import io.reactivex.disposables.CompositeDisposable
@@ -13,7 +13,7 @@ import io.reactivex.observers.DisposableObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DrillsListViewModel(val repository: DrillRepository) : ViewModel() {
+class DrillsListViewModel(val repository: IDrillRepository) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
